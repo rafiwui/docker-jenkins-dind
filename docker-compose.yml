@@ -6,8 +6,9 @@ services:
       context: .
       dockerfile: jenkins/Dockerfile
     restart: unless-stopped
-    ports:
+    expose:
       - "8080"
+    ports:
       - "50000:50000"
     environment:
       TZ: "<Your timezone>"

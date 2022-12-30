@@ -24,6 +24,10 @@ RUN apt-get update && \
         containerd.io && \
     curl -L https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/2.12.9/jenkins-plugin-manager-2.12.9.jar -o jenkins-plugin-manager.jar
 
+# Install Docker Compose
+RUN curl -L "https://github.com/docker/compose/releases/download/latest/docker-compose-$(uname -s|tr '[:upper:]' '[:lower:]')-$(uname -m)" -o /usr/local/bin/docker-compose
+RUN chmod +x /usr/local/bin/docker-compose
+
 # Add the Jenkins user to the Docker group
 RUN usermod -aG docker jenkins
 
