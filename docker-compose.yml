@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  jenkins:
+    build:
+      context: .
+      dockerfile: jenkins/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8080"
+      - "50000:50000"
+    environment:
+      TZ: "<Your timezone>"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  nginx:
+    image: nginx
+    restart: unless-stopped
+    links:
+      - jenkins
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    environment:
+      VIRTUAL_HOST: "<URL of jenkins>"
+      LETSENCRYPT_HOST: "<URL of jenkins>"
+      LETSENCRYPT_EMAIL: "<E-Mail to receive cert updates>"
+      TZ: "<Your timezone>"
+    networks:
+      - default
+      - proxy_default
+
+volumes:
+  jenkins_home:
+
+networks:
+  proxy_default:
+    external: true
